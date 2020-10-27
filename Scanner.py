@@ -236,7 +236,7 @@ class Scanner:
 
 
 def run():
-    scanner = Scanner("p1err.txt", "token.in")
+    scanner = Scanner("program.txt", "token.in")
     scanner.scanProgram()
 
 

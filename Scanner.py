@@ -2,7 +2,7 @@ from HashTable import HashTable
 
 
 def isSymbol(givenCharacter):
-    if givenCharacter in "[]{}()!=-+*/\\;:'\",<.>&|%":
+    if givenCharacter in "[]{}()!=-+*/\\;,<.>&|%":
         return True
     return False
 

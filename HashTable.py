@@ -16,7 +16,10 @@ class Node:
         self.__nextNodePosition = givenNextNodePosition
 
     def printNode(self):
-        print("Value: ", self.getValue(), " NextNodePosition: ", self.getNextNodePosition())
+        print("Value: " + str(self.getValue()) + " NextNodePosition: " + str(self.getNextNodePosition()))
+
+    def printNodeString(self):
+        return "Value: " + str(self.getValue()) + " NextNodePosition: " + str(self.getNextNodePosition())
 
 
 class HashTable:
@@ -81,9 +84,20 @@ class HashTable:
                     return currentPosition
                 else:
                     currentPosition = self.data[currentPosition].getNextNodePosition()
+            if self.data[currentPosition].getValue() == givenElement:
+                return currentPosition
             return -1
 
     def print(self):
         for index in range(self.capacity):
-            self.data[index].printNode()
+            if self.data[index].getValue() != ['']:
+                print("Position: " + str(index), end=' ')
+                self.data[index].printNode()
 
+    def printString(self):
+        printableString = ""
+        for index in range(self.capacity):
+            if self.data[index].getValue() != ['']:
+                printableString += "Position: " + str(index) + " " + self.data[index].printNodeString() + '\n'
+
+        return printableString

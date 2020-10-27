@@ -14,8 +14,8 @@ constant -> 1
 :>=: -> 11
 :==: -> 12
 :!=: -> 13
-:&: -> 14
-:|: -> 15
+:&&: -> 14
+:||: -> 15
 ; -> 16
 { -> 17
 } -> 18
@@ -31,7 +31,7 @@ char -> 27
 string -> 28
 mainFunction -> 29
 readFromKeyboard -> 30
-writeFromKeyboard -> 31
+writeToKeyboard -> 31
 << -> 32
 >> -> 33
 if -> 34
@@ -39,3 +39,4 @@ else -> 35
 while -> 36
 ' -> 37
 return -> 38
+~ -> 39

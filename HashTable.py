@@ -61,12 +61,12 @@ class HashTable:
         if self.data[currentPosition].getValue()[0] == "":  # empty node on current position
             self.data[currentPosition].setValue(givenElement)
         elif self.data[currentPosition].getNextNodePosition() == -1:  # occupied node on current position but no
-                                                                      # nextNodePosition
+            # nextNodePosition
             self.data[self.emptyPosition].setValue(givenElement)
             self.data[currentPosition].setNextNodePosition(self.emptyPosition)
-        else:                                                         # occupied node on current position and existing
-                                                                      # nextNodePosition -> we go until we dont have
-                                                                      #another nextNodePosition
+        else:  # occupied node on current position and existing
+            # nextNodePosition -> we go until we dont have
+            # another nextNodePosition
             while self.data[currentPosition].getNextNodePosition() != -1:
                 currentPosition = self.data[currentPosition].getNextNodePosition()
             self.data[self.emptyPosition].setValue(givenElement)
@@ -101,3 +101,6 @@ class HashTable:
                 printableString += "Position: " + str(index) + " " + self.data[index].printNodeString() + '\n'
 
         return printableString
+
+    def getValueOfPosition(self, givenPosition):
+        return self.data[givenPosition].getValue()

@@ -2,7 +2,7 @@ from HashTable import HashTable
 
 
 def isSymbol(givenCharacter):
-    if givenCharacter in "[]{}()!=-+*/\\;,<.>&|%":
+    if givenCharacter in "[]{}()!=*/\\;,<.>&|%":
         return True
     return False
 
@@ -152,16 +152,51 @@ class Scanner:
                     self.__PIF.append([currentElement, self.__tokensList[currentElement]])
 
                 elif currentLine[index] == '~':
-                    currentElement += currentLine[index]
-                    self.__PIF.append([currentElement, self.__tokensList[currentElement]])
-                    index += 1
-                    currentElement = ""
                     while currentLine[index] != '\n':
-                        currentElement += currentLine[index]
                         index += 1
-                    if self.__symbolTable.find(currentElement) == -1:
-                        self.__symbolTable.add(currentElement)
-                    self.__PIF.append(["comment", self.__symbolTable.find(currentElement)])
+
+                elif currentLine[index] == '-' or currentLine[index] == '+':
+                    currentElement += currentLine[index]
+                    index += 1
+                    if self.__PIF[-1][0] == "constant":
+                        constant = self.__symbolTable.getValueOfPosition(self.__PIF[-1][1])
+                        if constant.isdigit() or constant[1:].isdigit():
+                            self.__PIF.append([currentElement, self.__tokensList[currentElement]])
+
+                    elif self.__PIF[-1][0] in "-+/%*" or currentLine[index].isdigit():
+                        if currentLine[index].isdigit():
+                            while currentLine[index] != '\n' and currentLine[index].isdigit():
+                                currentElement += currentLine[index]
+                                index += 1
+                            if currentLine[index].isalpha():
+                                # throw exception - invalid identifier
+                                print(
+                                    "Lexical Error on line " + str(lineNumber) + ": Invalid identifier " + str(
+                                        currentElement))
+                                return
+                            if currentElement[1] == '0':
+                                # throw exception - number cannot start with 0
+                                print("Lexical Error on line " + str(lineNumber) + ": Number cannot start with 0/ we "
+                                                                                   "cannot have -0 or +0: " + str(
+                                                                                    currentElement))
+                                return
+                            if len(currentElement) == 1:
+                                # throw exception - we have a - or + without any number after it
+                                print("Lexical Error on line " + str(lineNumber) + ": We have a + or a - without any "
+                                                                                   "number after it: " + str(
+                                                                                    currentElement))
+                                return
+                            if self.__symbolTable.find(currentElement) == -1:
+                                self.__symbolTable.add(currentElement)
+                                self.__PIF.append(["constant", self.__symbolTable.find(currentElement)])
+                            else:
+                                self.__PIF.append(["constant", self.__symbolTable.find(currentElement)])
+
+                        else:
+                            self.__PIF.append([currentElement, self.__tokensList[currentElement]])
+
+                    else:
+                        self.__PIF.append([currentElement, self.__tokensList[currentElement]])
 
                 elif isSymbol(currentLine[index]):
                     while currentLine[index] != '\n' and isSymbol(currentLine[index]):
@@ -195,12 +230,13 @@ class Scanner:
 
     def printSymbolTable(self, givenSymbolTableFile):
         with open(givenSymbolTableFile, 'w') as filePath:
-            filePath.write("Symbol Table created using a Hash Map, collision resolution similar to coalesced chaining\n")
+            filePath.write(
+                "Symbol Table created using a Hash Map, collision resolution similar to coalesced chaining\n")
             filePath.write(self.__symbolTable.printString())
 
 
 def run():
-    scanner = Scanner("program.txt", "token.in")
+    scanner = Scanner("p1err.txt", "token.in")
     scanner.scanProgram()
 
 
